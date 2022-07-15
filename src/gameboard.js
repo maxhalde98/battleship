@@ -4,7 +4,7 @@ const NAMES = ['Carrier', 'Battleship', 'Destroyer', 'Submarine', 'Patrol Boat']
 
 const gameboardFactory = () => {
     return {
-        grid: new Array(10).fill(new Array(10)),
+        grid: [[],[],[],[],[],[],[],[],[],[]],
         myShips: initializeShips(),
         placeShip(ship, coordinates, direction) {
             let rowIndex = coordinates[0];
@@ -13,18 +13,39 @@ const gameboardFactory = () => {
             let length = ship.length;
             if (direction === 'Horizontal') {
                 for (i=0; i<length; i++) {
-                    this.grid[rowIndex][colIndex+i] = shipName;
+                    this.grid[rowIndex][colIndex+i] = [shipName, i];
                 }
             }
             else {
-                // let col = this.gridcolIndex;
-                // for (i=0; i<length; i++) {
-                //     this.grid[rowIndex+icolIndex] = shipName;
-                // }
-                // console.log(this.grid);
+                for (i=0; i<length; i++) {
+                    this.grid[rowIndex+i][colIndex] = [shipName, i];
+                }
             }
 
         },
+        receiveAttack(coordinates) {
+            let rowIndex = coordinates[0];
+            let colIndex = coordinates[1];
+            if (this.grid[rowIndex][colIndex] === undefined) {
+                this.grid[rowIndex][colIndex] = 'missed';
+            }
+            else {
+                for (i=0; i<this.myShips.length; i++) {
+                    if (this.grid[rowIndex][colIndex][0] === this.myShips[i].name) {
+                        this.myShips[i].hit(this.grid[rowIndex][colIndex][1]);
+                    }
+                }
+            }
+        },
+        checkIfAllSunk() {
+            let isOver = true;
+            this.myShips.forEach(ship => {
+                if (!ship.isSunk()) {
+                    isOver = false;
+                }
+            });
+            return isOver;
+        }
     };
 
 }

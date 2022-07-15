@@ -3,9 +3,19 @@
     <head>
         <meta charset="UTF-8">
         <title>Battleship</title>
-        <script src="main.js"></script>
+        <script src="main.js" defer></script>
+        <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <div id="content"></div>    
+        <div class="hf"></div>
+        <div id="content">
+            <div id="title">BATTLESHIP</div>
+            <div id="play-div">
+                <span>ENTER YOUR NAME: </span>
+                <input type="text" name="player-name" id="player-name">
+                <button id="start-btn">START</button>
+            </div>
+        </div>   
+        <div class="hf"></div> 
     </body>
 </html>

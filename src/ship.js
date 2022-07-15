@@ -25,10 +25,10 @@ const shipFactory = (name) => {
         name,
         hitMarks: Array(length).fill(false), 
         hit(position) {
-            if (position > this.length || position < 1) {
+            if (position > this.length-1 || position < 0) {
                 return 'Invalid hit position'
             }
-            this.hitMarks[position-1] = true;
+            this.hitMarks[position] = true;
         },
         isSunk() {
             let sunk = true;

@@ -14,14 +14,34 @@ test('check that each gameboard has one ship of each type (5 total)', () => {
     expect(gameboardFactory().myShips[4].name).toEqual('Patrol Boat');
 })
 
-test('check that the gameboard can place ships on board', () => {
+test('check that the gameboard can place ships horizontally on board', () => {
     let board = gameboardFactory();
-    board.placeShip(board.myShips[0], [2,5], 'Vertical');
-    console.log(board.grid[2]);
-    expect(board.grid[2][5]).toEqual('Carrier');
-    expect(board.grid[3][5]).toEqual('Carrier');
-    expect(board.grid[4][5]).toEqual('Carrier');
-    expect(board.grid[5][5]).toEqual('Carrier');
-    expect(board.grid[6][5]).toEqual('Carrier');
-    expect(board.grid[8][5]).toEqual('Carrier');
+    board.placeShip(board.myShips[4], [2,5], 'Horizontal');
+    expect(board.grid[2][5]).toEqual(['Patrol Boat', 0]);
+    expect(board.grid[2][6]).toEqual(['Patrol Boat', 1]);
+    expect(board.grid[1][5]).toEqual(undefined);
+    expect(board.grid[2][7]).toEqual(undefined);
+})
+
+test('check that the gameboard can place ships vertically on board', () => {
+    let board = gameboardFactory();
+    board.placeShip(board.myShips[4], [2,5], 'Vertical');
+    expect(board.grid[2][5]).toEqual(['Patrol Boat', 0]);
+    expect(board.grid[3][5]).toEqual(['Patrol Boat', 1]);
+    expect(board.grid[1][5]).toEqual(undefined);
+    expect(board.grid[2][7]).toEqual(undefined);
+})
+
+test('check that the gameboard has a receiveAttack function that marks missed attacks as missed on board', () => {
+    let board = gameboardFactory();
+    board.receiveAttack([2,5]);
+    expect(board.grid[2][5]).toEqual('missed');
+})
+
+test('check that the gameboard has a receiveAttack function that hits the appropriate ship when needed', () => {
+    let board = gameboardFactory()
+    board.placeShip(board.myShips[4], [2,5], 'Vertical');
+    board.receiveAttack([2,5]);
+    expect(board.myShips[4].hitMarks[0]).toEqual(true);
+    expect(board.myShips[4].hitMarks[1]).toEqual(false);
 })
